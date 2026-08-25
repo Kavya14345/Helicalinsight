@@ -5,6 +5,7 @@ import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonSyntaxException;
 import com.helicalinsight.datasource.GsonUtility;
+import com.helicalinsight.datasource.mongodb.MongoDbConnectionProvider;
 import com.helicalinsight.datasource.nosql.NoSQLLoader;
 import com.helicalinsight.efw.exceptions.EfwServiceException;
 import com.mongodb.*;
@@ -13,7 +14,9 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 
 /**
@@ -82,33 +85,16 @@ public class MongoDrillLoader extends NoSQLLoader {
 
     @Override
     public boolean testConnection(JsonObject formData) {
-        String host = GsonUtility.optString(formData, "host");
-        String uri = GsonUtility.optString(formData,"jdbcUrl");
-        String database = GsonUtility.optString(formData,"database");
-        String username = GsonUtility.optString(formData,"userName");
-        String password = GsonUtility.optString(formData,"password");
-        if (StringUtils.isEmpty(database)) {
-            database = GsonUtility.optString(formData,"databaseName");
-        }
-        MongoModel mongoModel = new MongoModel();
-        String splitArray[] = uri.split(":");
-        if (splitArray.length >= 3) {
-            String hostName = splitArray[1].replace("//", "");
-            String port = splitArray[2].substring(0, splitArray[2].indexOf("/"));
-            mongoModel.setHost(hostName + ":" + port);
-            mongoModel.setUri(uri);
-        }
-
-        int timeout = GsonUtility.optInt(formData, "timeOut");
-        int maxWait = GsonUtility.optInt(formData, "maxWait");
-        String authMechanism = GsonUtility.optString(formData,"authMechanism");
-        mongoModel.setDatabase(database);
-        mongoModel.setUsername(username);
-        mongoModel.setPassword(password);
-        mongoModel.setAuthMechanism(authMechanism);
-        mongoModel.setTimeout(timeout);
-        mongoModel.setMaxWait(maxWait);
-        return mongoModel.testConnection();
+        Map<String, String> config = new HashMap<>();
+        config.put("host", GsonUtility.optString(formData, "host"));
+        config.put("port", GsonUtility.optString(formData, "port"));
+        config.put("database", GsonUtility.optString(formData, "database"));
+        config.put("databaseName", GsonUtility.optString(formData, "databaseName"));
+        config.put("userName", GsonUtility.optString(formData, "userName"));
+        config.put("password", GsonUtility.optString(formData, "password"));
+        config.put("jdbcUrl", GsonUtility.optString(formData, "jdbcUrl"));
+        config.put("authSource", GsonUtility.optString(formData, "authSource"));
+        return MongoDbConnectionProvider.testConnection(config);
     }
 }
 

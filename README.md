@@ -71,6 +71,7 @@ Helical Insight connects to virtually any modern data source through native conn
 | Snowflake | Parquet | IBM DB2 |  |  |
 | Teradata | TSV | SAP HANA |  |  |
 |  | Google Cloud Storage | SQLite |  |  |
+|  |  |  | MongoDB |  |
 
 ![Introduction](docs/supported_datasources.png)
 

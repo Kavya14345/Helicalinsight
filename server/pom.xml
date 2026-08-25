@@ -82,7 +82,8 @@
 		<rhino.version>1.8.0</rhino.version>
 
 		<calcite.version>1.39.0</calcite.version>
-		<mongo.java.driver>3.12.10</mongo.java.driver>
+			   <mongo.java.driver>3.12.10</mongo.java.driver>
+			   <mongo.sync.driver.version>4.11.1</mongo.sync.driver.version>
 
 		<groovy.version>5.0.1</groovy.version>
 		<cas.client.version>4.1.1</cas.client.version>
@@ -155,7 +156,11 @@
 			<artifactId>jaxb-impl</artifactId>
 			<version>${javax.xml.version}</version>
 		</dependency>
-
+		       <dependency>
+			       <groupId>org.mongodb</groupId>
+			       <artifactId>mongodb-driver-sync</artifactId>
+			       <version>${mongo.sync.driver.version}</version>
+		       </dependency>
 		<dependency>
 			<groupId>com.sun.xml.bind</groupId>
 			<artifactId>jaxb-core</artifactId>
